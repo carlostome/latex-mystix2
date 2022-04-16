@@ -1,0 +1,229 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{mystix2}
+
+\newif\ifletters
+\newif\ifoperators
+\newif\ifsymbols
+\newif\ifarrows
+\newif\ifmathscr
+\newif\ifmathbb
+\newif\ifmathbfsf
+\newif\ifnone
+\newif\ifall
+
+\newif\ifmath
+\newif\iftext
+\newif\iffontenc
+\newif\ifunicodemath
+
+\lettersfalse
+\operatorsfalse
+\symbolsfalse
+\arrowsfalse
+\mathscrfalse
+\mathbbfalse
+\mathbfsffalse
+\nonefalse
+\alltrue
+
+\mathfalse
+\textfalse
+\fontencfalse
+\unicodemathfalse
+
+\DeclareOption{letters}  {\allfalse\letterstrue}
+\DeclareOption{operators}{\allfalse\operatorstrue}
+\DeclareOption{symbols}  {\allfalse\symbolstrue}
+\DeclareOption{arrows}   {\allfalse\arrowstrue}
+\DeclareOption{mathscr}  {\allfalse\mathscrtrue}
+\DeclareOption{mathbb}   {\allfalse\mathbbtrue}
+\DeclareOption{mathbfsf} {\allfalse\mathbfsftrue}
+\DeclareOption{none}     {\allfalse\nonetrue}
+
+\DeclareOption{math}{\mathtrue\unicodemathtrue}
+\DeclareOption{text}{\texttrue\fontenctrue}
+
+\DeclareOption*{\PackageWarningNoLine{mystix2}{Unknown option: `\CurrentOption'}}
+
+\ProcessOptions\relax
+
+\ifall
+  \letterstrue
+  \operatorstrue
+  \symbolstrue
+  \arrowstrue
+  \mathscrtrue
+  \mathbbtrue
+  \mathbfsftrue
+\fi
+
+\newif\iferror
+\errorfalse
+
+\ifnone
+  \ifletters
+    \errortrue
+  \else
+    \ifoperators
+      \errortrue
+    \else
+      \ifsymbols
+        \errortrue
+      \else
+        \ifarrows
+          \errortrue
+        \else
+          \ifmathscr
+            \errortrue
+          \else
+            \ifmathbb
+              \errortrue
+            \else
+              \ifmathbfsf
+                \errortrue
+              \fi
+            \fi
+          \fi
+        \fi
+      \fi
+    \fi
+  \fi
+  \iferror
+    \PackageError{mystix2}{%
+      `none' and at least one other option given%
+    }{%
+      Omit `none' or all other options%
+    }
+  \fi
+\fi
+
+\newif\iflsonestixtwoscr
+\lsonestixtwoscrfalse
+
+\ifsymbols
+  \lsonestixtwoscrtrue
+\fi
+
+\ifmathscr
+  \lsonestixtwoscrtrue
+\fi
+
+\makeatletter
+\DeclareFontEncoding{LS1}{}{}
+\DeclareFontEncoding{LS2}{}{\@noaccents} % Local other Symbol encoding 2
+\makeatother
+\DeclareFontSubstitution{LS1}{stix2}{m}{n} % fallback for LS1, ls2stix2.fd
+\DeclareFontSubstitution{LS2}{stix2}{m}{n} % fallback for LS2, ls2stix2.fd
+
+\iflsonestixtwoscr
+  \DeclareSymbolFont{ls1stix2scr}{LS1}{stix2scr}{m}{n} % ls1stix2scr.fd
+\fi
+
+\ifletters
+  \DeclareSymbolFont{ls1stix2it}{LS1}{stix2}{m}{it} % ls1stix2.fd
+
+  \DeclareMathSymbol{\subsetneq}{\mathrel}{ls1stix2it}{"D7}
+  \DeclareMathSymbol{\supsetneq}{\mathrel}{ls1stix2it}{"D8}
+  \DeclareMathSymbol{\vDash}    {\mathrel}{ls1stix2it}{"F5}
+\fi
+
+\ifoperators
+  \DeclareSymbolFont{ls1stix2}{LS1}{stix2}{m}{n} % ls1stix2.fd
+
+  \DeclareMathSymbol{\kernelcontraction}{\mathrel}{ls1stix2}{"EC}
+\fi
+
+\ifsymbols
+  \ifdefined\boxslash
+    \renewcommand{\boxslash}{\boxdiag}
+  \else
+    \newcommand{\boxslash}{\boxdiag}
+  \fi
+
+  \ifdefined\llcorner
+    \let\llcorner\undefined
+  \fi
+
+  \ifdefined\lrcorner
+    \let\lrcorner\undefined
+  \fi
+
+  \DeclareSymbolFont{ls1stix2fr}{LS1}{stix2frak}{m}{n} % ls1stix2frak.fd
+  \DeclareSymbolFont{ls2stix2ex}{LS2}{stix2ex}  {m}{n} % ls2stix2ex.fd
+
+  \DeclareMathSymbol   {\boxdiag}        {\mathbin}  {ls1stix2fr} {"B3}
+  \DeclareMathSymbol   {\blacklozenge}   {\mathord}  {ls1stix2fr} {"DA}
+
+  \DeclareMathSymbol   {\llcorner}       {\mathopen} {ls1stix2scr}{"A3}
+  \DeclareMathSymbol   {\lrcorner}       {\mathclose}{ls1stix2scr}{"A4}
+  \DeclareMathSymbol   {\blacksquare}    {\mathord}  {ls1stix2scr}{"B7}
+  \DeclareMathSymbol   {\vartriangleleft}{\mathrel}  {ls1stix2scr}{"D8}
+
+  \DeclareMathDelimiter{\llbracket}      {\mathopen} {ls2stix2ex} {"E0}{ls2stix2ex}{"06}
+  \DeclareMathDelimiter{\rrbracket}      {\mathclose}{ls2stix2ex} {"E1}{ls2stix2ex}{"07}
+  \DeclareMathDelimiter{\llvert}         {\mathopen} {ls2stix2ex} {"F1}{ls2stix2ex}{"F4}
+  \DeclareMathDelimiter{\rrvert}         {\mathclose}{ls2stix2ex} {"F1}{ls2stix2ex}{"F4}
+\fi
+
+\ifarrows
+  \newcommand{\simleftarrow} {\similarleftarrow}
+  \newcommand{\simrightarrow}{\similarrightarrow}
+
+  \DeclareSymbolFont{ls1stix2sf}{LS1}{stix2sf}{m}{n} % ls1stix2sf.fd
+  \DeclareSymbolFont{ls2stix2tt}{LS2}{stix2tt}{m}{n} % ls2stix2tt.fd
+
+  \DeclareMathSymbol{\similarleftarrow} {\mathrel}{ls1stix2sf}{"5B}
+  \DeclareMathSymbol{\twoheadleftarrow} {\mathrel}{ls1stix2sf}{"A5}
+  \DeclareMathSymbol{\twoheadrightarrow}{\mathrel}{ls1stix2sf}{"A7}
+  \DeclareMathSymbol{\leftarrowtail}    {\mathrel}{ls1stix2sf}{"A9}
+  \DeclareMathSymbol{\rightarrowtail}   {\mathrel}{ls1stix2sf}{"AA}
+  \DeclareMathSymbol{\leftleftarrows}   {\mathrel}{ls1stix2sf}{"CE}
+  \DeclareMathSymbol{\rightrightarrows} {\mathrel}{ls1stix2sf}{"D0}
+  \DeclareMathSymbol{\leftsquigarrow}   {\mathrel}{ls1stix2sf}{"E3}
+  \DeclareMathSymbol{\rightsquigarrow}  {\mathrel}{ls1stix2sf}{"E4}
+
+  \DeclareMathSymbol{\similarrightarrow}{\mathrel}{ls2stix2tt}{"20}
+  \DeclareMathSymbol{\square}           {\mathord}{ls2stix2tt}{"9A}
+\fi
+
+\ifmathscr
+  \DeclareSymbolFontAlphabet{\mymathscr}{ls1stix2scr}
+\fi
+
+\ifmathbb
+  \DeclareSymbolFont{ls1stix2bb}{LS1}{stix2bb}{m}{n} % ls1stix2bb.fd
+
+  \DeclareSymbolFontAlphabet{\mymathbb}{ls1stix2bb}
+\fi
+
+\ifmathbfsf
+  \DeclareSymbolFont{ls1stix2bfsf}{LS1}{stix2sf}{b}{n} % ls1stix2sf.fd
+
+  \DeclareSymbolFontAlphabet{\mymathbfsf}{ls1stix2bfsf}
+\fi
+
+\ifunicodemath
+  \RequirePackage{unicode-math}
+\else
+  \iffontenc
+    \RequirePackage[T1]{fontenc}
+  \fi
+\fi
+
+\ifmath
+  \setmathfont{STIXTwoMath-Regular.otf}
+\fi
+
+\iftext
+  \ifunicodemath
+    \setmainfont{STIXTwoText}[
+      Extension     ={.otf},
+      UprightFont   ={*-Regular},
+      BoldFont      ={*-Bold},
+      ItalicFont    ={*-Italic},
+      BoldItalicFont={*-BoldItalic}
+    ]
+  \else
+    \renewcommand{\rmdefault}{stix2}
+  \fi
+\fi
