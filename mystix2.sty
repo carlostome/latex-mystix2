@@ -7,6 +7,7 @@
 \newif\ifarrows
 \newif\ifmathscr
 \newif\ifmathbb
+\newif\ifmathcal
 \newif\ifmathbfsf
 \newif\ifnone
 \newif\ifall
@@ -22,6 +23,7 @@
 \arrowsfalse
 \mathscrfalse
 \mathbbfalse
+\mathcalfalse
 \mathbfsffalse
 \nonefalse
 \alltrue
@@ -37,6 +39,7 @@
 \DeclareOption{arrows}   {\allfalse\arrowstrue}
 \DeclareOption{mathscr}  {\allfalse\mathscrtrue}
 \DeclareOption{mathbb}   {\allfalse\mathbbtrue}
+\DeclareOption{mathcal}  {\allfalse\mathcaltrue}
 \DeclareOption{mathbfsf} {\allfalse\mathbfsftrue}
 \DeclareOption{none}     {\allfalse\nonetrue}
 
@@ -54,6 +57,7 @@
   \arrowstrue
   \mathscrtrue
   \mathbbtrue
+  \mathcaltrue
   \mathbfsftrue
 \fi
 
@@ -79,8 +83,12 @@
             \ifmathbb
               \errortrue
             \else
-              \ifmathbfsf
+              \ifmathcal
                 \errortrue
+              \else
+                \ifmathbfsf
+                  \errortrue
+                \fi
               \fi
             \fi
           \fi
@@ -194,6 +202,12 @@
   \DeclareSymbolFont{ls1stix2bb}{LS1}{stix2bb}{m}{n} % ls1stix2bb.fd
 
   \DeclareSymbolFontAlphabet{\mymathbb}{ls1stix2bb}
+\fi
+
+\ifmathcal
+  \DeclareSymbolFont{ls2stix2cal}{LS2}{stix2cal}{m}{n} % ls2stix2cal.fd
+
+  \DeclareSymbolFontAlphabet{\mymathcal}{ls2stix2cal}
 \fi
 
 \ifmathbfsf
