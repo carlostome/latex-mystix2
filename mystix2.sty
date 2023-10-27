@@ -43,7 +43,7 @@
 \DeclareOption{mathbfsf} {\allfalse\mathbfsftrue}
 \DeclareOption{none}     {\allfalse\nonetrue}
 
-\DeclareOption{math}{\mathtrue\unicodemathtrue}
+\DeclareOption{math}{\mathtrue}
 \DeclareOption{text}{\texttrue\fontenctrue}
 
 \DeclareOption*{\PackageWarningNoLine{mystix2}{Unknown option: `\CurrentOption'}}
@@ -225,7 +225,36 @@
 \fi
 
 \ifmath
-  \setmathfont{STIXTwoMath-Regular.otf}
+  \ifunicodemath
+    \setmathfont{STIXTwoMath-Regular.otf}
+  \else
+    % XXX: LS codes differ from OM encodings in general
+    \SetSymbolFont{letters}     {normal}{LS1}{stix2}  {m}{it}
+    \SetSymbolFont{operators}   {normal}{LS1}{stix2}  {m}{n}
+    \SetSymbolFont{largesymbols}{normal}{LS2}{stix2ex}{m}{n}
+
+    \SetMathAlphabet{\mathit}  {normal}{LS1}{stix2}    {m}{it}
+    \SetMathAlphabet{\mathrm}  {normal}{LS1}{stix2}    {m} {n}
+    \SetMathAlphabet{\mathcal} {normal}{LS2}{stix2cal} {m} {n}
+    \SetMathAlphabet{\mathsf}  {normal}{LS1}{stix2sf}  {m} {n}
+    \SetMathAlphabet{\mathtt}  {normal}{LS2}{stix2tt}  {m} {n}
+    \SetMathAlphabet{\mathbf}  {normal}{LS1}{stix2}    {b} {n}
+    \ifdefined\mathscr
+    \SetMathAlphabet{\mathscr} {normal}{LS1}{stix2scr} {m} {n}
+    \fi
+    \ifdefined\mathfrak
+    \SetMathAlphabet{\mathfrak}{normal}{LS1}{stix2frak}{m} {n}
+    \fi
+    \ifdefined\mathbb
+    \SetMathAlphabet{\mathbb}  {normal}{LS1}{stix2bb}  {m} {n}
+    \fi
+    \ifdefined\mathsfit
+    \SetMathAlphabet{\mathsfit}{normal}{LS1}{stix2sf}  {m}{it}
+    \fi
+
+    \DeclareMathDelimiter{(}{\mathopen} {operators}{"2E}{largesymbols}{"00}
+    \DeclareMathDelimiter{)}{\mathclose}{operators}{"2F}{largesymbols}{"01}
+  \fi
 \fi
 
 \iftext
